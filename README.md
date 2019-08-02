@@ -3,7 +3,7 @@
 
 ## Brief
 
-This is an edit of the project from https://github.com/joshpangell to incorporate only a single download link that may be used for any one of multiple files
+This is an edit of the project from https://github.com/joshpangell to incorporate only a single download link that may be used for any one of multiple files. 
 
 ## Description
 
@@ -14,6 +14,10 @@ You can also mask the name of the file being downloaded, for further protection.
 ## Update
 
 Modified the Links from the original project in order to have only 1 download of any of the specified files.
+
+Added additional functionality within generate to move files from the unprocessed folder into the secrets folder so that the system can track how many files are left within the network and return a 503 service unavailable when the amount exceeds what is available
+
+Also provided an api flag on the gnerate page which just returns a html page with the plain text link in it to feed into downstream systems
 
 ## Usage
 

@@ -1,0 +1,2 @@
+docker build -t test-php .
+docker run -it --rm --name test test-php

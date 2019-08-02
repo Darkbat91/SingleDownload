@@ -11,8 +11,10 @@
 	
 	// The input string
 	$key = trim($_GET['key']);
-	$i = trim($_GET['i']);
+	$filename = trim($_GET['i']);
 	
+
+	$file = 'secret/' . $filename;
 	/*
 	 *	Retrive the keys
 	 */
@@ -43,9 +45,11 @@
 		/*
 		 *	Forces the browser to download a new file
 		 */
-		$contenttype = $PROTECTED_DOWNLOADS[$i]['content_type'];
-		$filename = $PROTECTED_DOWNLOADS[$i]['suggested_name'];
-		$file = $PROTECTED_DOWNLOADS[$i]['protected_path'];
+		// $contenttype = $PROTECTED_DOWNLOADS[$i]['content_type'];
+		// since we are pulling from the directory dynamically we can detect the content type unless i do file extension handling
+		$contenttype = 'application/x-openvpn-profile';
+		// $filename = $PROTECTED_DOWNLOADS[$i]['suggested_name'];
+		// $file = $PROTECTED_DOWNLOADS[$i]['protected_path'];
 		$remote_file = $PROTECTED_DOWNLOADS[$i]['remote_path'];
 
 		set_time_limit(0);

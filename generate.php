@@ -4,12 +4,16 @@
  *      The query string should be the password (which is set in variables.php)
  *      If the password fails, then 404 is rendered
  *
- *      Expects: generate.php?1234
+ *      Expects: generate.php?p=1234
+ *      Expects: generate.php?p=1234&api=y
+ * 
  */
         include("variables.php");
 
         // Grab the query string as a password
-        $password = trim($_SERVER['QUERY_STRING']);
+        $password = trim($_GET['p']);
+	$api = trim($_GET['api']);
+        // $password = trim($_SERVER['QUERY_STRING']);
 
         // Get a human readable file size from bytes
         function human_filesize($bytes, $decimals = 2) {
@@ -26,40 +30,47 @@
                 // Create a list of files to download from
                 $download_list = array();
 
-                if(is_array($PROTECTED_DOWNLOADS)) {
-                        // Create single key to download any one of the files in the array
-			$new = uniqid('key',TRUE);
-                        foreach ($PROTECTED_DOWNLOADS as $key => $download) {
+                // Create single key to download any one of the files in the array
+                $new = uniqid('key',TRUE);
+                // Pull the top file from the work directory - TODO: Add error handling if the directory is empty
+                $activearray = scandir(WORK_DIR);
+                // The file we want is actually the 3rd file in the array due to . and .. 
+                $activefile = $activearray[2];
+                
+            if(count($activearray) > 2) {
+                
+        
+                
+                rename(WORK_DIR . $activefile, 'secret/' . $activefile);
 
-                                // get download link and file size
-                                $download_link = "http://" . $_SERVER['HTTP_HOST'] . DOWNLOAD_PATH . "?key=" . $new . "&i=" . $key;
-                                $filesize = (isset($download['file_size'])) ? $download['file_size'] : human_filesize(filesize($download['protected_path']), 2);
+                // get download link and file size
+                $download_link = "http://" . $_SERVER['HTTP_HOST'] . DOWNLOAD_PATH . "?key=" . $new . "&i=" . $activefile;
+                $filesize = (isset($activefile['file_size'])) ? $activefile['file_size'] : human_filesize(filesize('secret/' . $activefile), 2);
 
-                                // Add to the download list
-                                $download_list[] = array(
-                                        'download_link' => $download_link,
-                                        'filesize' => $filesize
-                                );
+                // Add to the download list
+                $download_list[] = array(
+                        'download_link' => $download_link,
+                        'filesize' => $filesize
+                );
 
-                                /*
-                                 *      Create a protected directory to store keys in
-                                 */
-                                if(!is_dir('keys')) {
-                                        mkdir('keys');
-                                        $file = fopen('keys/.htaccess','w');
-                                        fwrite($file,"Order allow,deny\nDeny from all");
-                                        fclose($file);
-                                }
+                /*
+                        *      Create a protected directory to store keys in
+                        */
+                if(!is_dir('keys')) {
+                        mkdir('keys');
+                        $file = fopen('keys/.htaccess','w');
+                        fwrite($file,"Order allow,deny\nDeny from all");
+                        fclose($file);
+                }
 
-                        }
                         /*
                          *      Write the key to the keys list - Only one time
                          */
                         $file = fopen('keys/keys','a');
                         fwrite($file,"{$new}\n");
                         fclose($file);
-                }
-
+            if($api != 'y') {
+        
 ?>
 
 
@@ -88,14 +99,32 @@
                         <? } ?>
 
                         <br><br>
-                        <a href="/singleuse">Back to the demo</a>
+                        <a href="/">Back to the demo</a>
                 </div>
         </body>
 </html>
 
 <?php
+
+    } // end of api if statement
+    else {
+        // return just the download link in the body
+        foreach ($download_list as $download) {
+?>
+<html>
+<body>
+<?php echo $download['download_link']; ?>
+</body>
+</html> 
+<?php
+        } // end foreach satement
+    }
+    } // end of more files if
+    else {
+        header("HTTP/1.0 503 Service Unavailable");
         }
-	} else {
+    } // end of password if 
+    else {
                 /*
                  *      Someone stumbled upon this link with the wrong password
                  *      Fake a 404 so it does not look like this is a correct path

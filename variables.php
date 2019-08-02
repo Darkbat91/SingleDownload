@@ -14,18 +14,20 @@
  */	
  	
 	// Arrays of content type, suggested names and protected names
-	$PROTECTED_DOWNLOADS = array(
-		array(
-			'content_type' => 'application/x-openvpn-profile', 
-			'suggested_name' => 'VPN_Safe1.ovpn', 
-			'protected_path' => 'secret/test.ovpn' // local file
-		),
-		array(
-			'content_type' => 'application/x-openvpn-profile', 
-			'suggested_name' => 'VPN_Safe2.ovpn', 
-			'protected_path' => 'secret/test2.ovpn' // local file
-		),
-	);
+	// $PROTECTED_DOWNLOADS = array(
+	// 	array(
+	// 		'content_type' => 'application/x-openvpn-profile', 
+	// 		'suggested_name' => 'VPN_Safe1.ovpn', 
+	// 		'protected_path' => 'secret/test.ovpn' // local file
+	// 	),
+	// 	array(
+	// 		'content_type' => 'application/x-openvpn-profile', 
+	// 		'suggested_name' => 'VPN_Safe2.ovpn', 
+	// 		'protected_path' => 'secret/test2.ovpn' // local file
+	// 	),
+	// );
+
+	define('WORK_DIR','unprocessed/');
 
 	// The path to the download.php file (probably same dir as this file)
  	define('DOWNLOAD_PATH','/download.php');
