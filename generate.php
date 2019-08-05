@@ -34,11 +34,11 @@
                 $new = uniqid('key',TRUE);
                 // Pull the top file from the work directory - TODO: Add error handling if the directory is empty
                 $activearray = scandir(WORK_DIR);
-                // The file we want is actually the 3rd file in the array due to . and .. 
-                $activefile = $activearray[2];
+
                 
             if(count($activearray) > 2) {
-                
+                // The file we want is actually the 3rd file in the array due to . and .. 
+                $activefile = $activearray[2];                
         
                 
                 rename(WORK_DIR . $activefile, 'secret/' . $activefile);
@@ -96,7 +96,7 @@
                                 <a href="<?php echo $download['download_link'] ?>"><?php echo $download['download_link'] ?></a><br>
                                 Size: <?php echo $download['filesize'] ?>
                         </h4>
-                        <? } ?>
+                        <?php } ?>
 
                         <br><br>
                         <a href="/">Back to the demo</a>
@@ -106,7 +106,7 @@
 
 <?php
 
-    } // end of api if statement
+        } // end of api if statement
     else {
         // return just the download link in the body
         foreach ($download_list as $download) {
